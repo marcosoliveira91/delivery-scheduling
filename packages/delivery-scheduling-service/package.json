@@ -1,0 +1,70 @@
+{
+  "name": "delivery-scheduling-service",
+  "version": "1.0.0",
+  "author": "Marcos Oliveira",
+  "license": "ISC",
+  "description": "",
+  "main": "dist/core/index.js",
+  "scripts": {
+    "build": "npm run clean && npm run compile",
+    "clean": "rm -rf ./dist",
+    "compile": "tsc -p tsconfig.build.json",
+    "start": "node ./dist/core/main.js",
+    "start:dev": "tsc-watch -p tsconfig.build.json --onSuccess 'node ./dist/core/main.js'",
+    "test": "jest",
+    "test:cov": "jest --coverage",
+    "prepublishOnly": "npm run build"
+  },
+  "jest": {
+    "rootDir": "./src",
+    "collectCoverage": true,
+    "testRegex": ".spec.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "transformIgnorePatterns": [
+      "^.+\\.js$"
+    ],
+    "globals": {
+      "ts-jest": {
+        "compiler": "ttypescript"
+      }
+    },
+    "setupFiles": [
+      "./jest.setup.ts",
+      "<rootDir>/core/__tests__/config.ts"
+    ],
+    "coverageReporters": [
+      "text",
+      "html"
+    ],
+    "collectCoverageFrom": [
+      "**/*.{ts,js}",
+      "!**/node_modules/**"
+    ],
+    "coverageDirectory": "../../../coverage",
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "moduleNameMapper": {
+      "^shared/(.*)$": "<rootDir>/shared/$1",
+      "^__tests__/(.*)$": "<rootDir>/__tests__/$1"
+    }
+  },
+  "devDependencies": {
+    "@types/convict": "^6.0.2",
+    "@types/pino": "^6.3.8",
+    "pino-pretty": "^5.1.0"
+  },
+  "dependencies": {
+    "convict": "^6.1.0",
+    "fastify": "^3.18.1",
+    "fastify-healthcheck": "^3.1.0",
+    "fastify-swagger": "^4.8.2",
+    "inversify": "^5.1.1",
+    "pino": "^6.11.3",
+    "reflect-metadata": "^0.1.13"
+  }
+}

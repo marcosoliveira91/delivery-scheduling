@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.build.json",
+  "compilerOptions": {
+    "baseUrl": "./packages",
+    "paths": {
+      "delivery-scheduling-service": ["delivery-scheduling-service/src"],
+    }
+  }
+}
