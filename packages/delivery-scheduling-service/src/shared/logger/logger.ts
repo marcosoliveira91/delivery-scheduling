@@ -7,10 +7,10 @@ class Logger implements ILogger{
   private readonly fileLogger: PinoLogger;
   private readonly consoleLogger: PinoLogger;
   private readonly formatters = {
-    bindings (bindings: any): object {
+    bindings (bindings: Record<string, string>): { hostname: string } {
       return { hostname: bindings.hostname };
     },
-    level (label: string): object {
+    level (label: string): { level: string } {
       return { level: label };
     },
   }
