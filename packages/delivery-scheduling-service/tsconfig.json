@@ -1,10 +1,8 @@
 {
   "extends": "../../tsconfig.json",
-
   "include": [
     "./src/**/*"
   ],
-
   "compilerOptions": {
     "plugins": [
       { "transform": "ts-auto-mock/transformer", "cacheBetweenTests": false }
