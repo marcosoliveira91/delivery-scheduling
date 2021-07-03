@@ -8,5 +8,6 @@ export class Routes {
     const sellerController = container.get(SellerController);
 
     server.setRoute('post', '/sellers', sellerController.createSeller, { schema: sellerSchemas.createSellerSchema });
+    server.setRoute('patch', '/sellers/:code', sellerController.partialUpdateSeller, { schema: sellerSchemas.partialUpdateSellerSchema });
   }
 }

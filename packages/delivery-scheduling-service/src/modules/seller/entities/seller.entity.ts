@@ -1,5 +1,5 @@
 export interface Seller {
-  id: string;
+  // id: string;
   code: string;
   name: string;
   openingHours: {
