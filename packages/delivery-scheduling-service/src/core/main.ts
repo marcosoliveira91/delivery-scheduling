@@ -18,9 +18,9 @@ const server: Server = new Server();
 DI.bootstrap(iocContainer);
 
 /* Bootstrap Server */
-CorsPlugin.bootstrap(server);
 ApiDocsGeneratorPlugin.bootstrap(server, configuration.env !== 'production');
 ApiHealthCheckPlugin.bootstrap(server);
+CorsPlugin.bootstrap(server);
 Routes.bootstrap(server, iocContainer);
 Hooks.bootstrap(server);
 

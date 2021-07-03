@@ -38,13 +38,13 @@ export class Server {
       });
   }
 
-  setRoute(verb: Verb, route: string, handler: RouteHandler, opts?: RouteShorthandOptions): void {
+  setRoute<T>(verb: Verb, route: string, handler: RouteHandler<T>, opts?: RouteShorthandOptions): void {
     if (!opts) {
-      this.instance[verb](route, handler);
+      this.instance[verb]<T>(route, handler);
       return;
     }
 
-    this.instance[verb](route, opts, handler);
+    this.instance[verb]<T>(route, opts, handler);
   }
 
   use(plugin: FastifyPluginCallback, opts?: FastifyRegisterOptions<FastifyPluginOptions>): void {

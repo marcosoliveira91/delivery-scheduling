@@ -94,11 +94,9 @@ export class Hooks {
   }
 
   private static handleSchemaValidationException(error: FastifyError): ReplyErrorPayload<FastifyError> {
-    const validationError = error?.validation?.[0];
-
     return {
       code: 'BAD_REQUEST',
-      message: validationError ? `${validationError.dataPath} ${validationError.message}` : 'invalid request',
+      message: error.message,
     };
   }
 }

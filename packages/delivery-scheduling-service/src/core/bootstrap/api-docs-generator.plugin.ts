@@ -20,10 +20,6 @@ export class ApiDocsGeneratorPlugin {
         produces: ['application/json'],
         tags: [
           {
-            name: 'TimeSlot',
-            description: 'Time slot related end-points',
-          },
-          {
             name: 'Seller',
             description: 'Seller related end-points',
           },

@@ -1,5 +1,5 @@
 import { Container, decorate, inject, injectable } from 'inversify';
-import { ClassDependencies, Newable } from './types';
+import { ClassDependencies, Newable } from './types/index';
 
 export class IocContainer {
   private readonly container: Container;
@@ -45,7 +45,7 @@ export class IocContainer {
     const target = Array.isArray(clss) ? clss[1] : clss;
 
     clssDependencies?.forEach((dependency, index) => {
-      decorate(inject(dependency) as ParameterDecorator, target, index);
+      decorate(inject(dependency) as globalThis.ParameterDecorator, target, index);
     });
   }
 

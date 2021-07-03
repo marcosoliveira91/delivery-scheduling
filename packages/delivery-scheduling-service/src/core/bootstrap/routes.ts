@@ -1,12 +1,12 @@
-// import * as schemas from '../schemas';
+import * as sellerSchemas from '../../modules/seller/schemas';
+import SellerController from '../../modules/seller/seller.controller';
 import { IocContainer } from '../ioc/container';
 import { Server } from '../server';
 
 export class Routes {
-  static bootstrap(_server: Server, _container: IocContainer): void {
-    // const sellerController: SellerController = container.get(SellerController);
+  static bootstrap(server: Server, container: IocContainer): void {
+    const sellerController = container.get(SellerController);
 
-    // server.setRoute('get', '/sellers/:code', sellersController.getSeller, { schema: schemas.getPellerSchema });
-    // server.setRoute('get', '/sellers/:code', Promise.resolve({}) as any);
+    server.setRoute('post', '/sellers', sellerController.createSeller, { schema: sellerSchemas.createSellerSchema });
   }
 }
