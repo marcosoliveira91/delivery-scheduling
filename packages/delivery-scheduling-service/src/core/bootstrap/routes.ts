@@ -15,5 +15,6 @@ export class Routes {
     server.setRoute('patch', '/sellers/:code', sellerController.partialUpdateSeller, { schema: sellerSchemas.partialUpdateSellerSchema });
 
     server.setRoute('get', '/slots', slotController.getSlots, { schema: slotSchemas.getSlotsSchema });
+    server.setRoute('post', '/slots', slotController.createSlot, { schema: slotSchemas.createSlotSchema });
   }
 }

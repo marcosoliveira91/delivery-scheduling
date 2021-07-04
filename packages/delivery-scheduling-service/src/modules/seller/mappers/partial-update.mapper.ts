@@ -1,7 +1,7 @@
 import { PartialUpdateSellerQuery } from '../entities/queries/partial-update-seller-query.entity';
 import { PartialUpdateSellerQueryDto } from '../dtos/queries/partial-update-seller-query.dto';
 import { Seller } from '../entities/seller.entity';
-import { ISellerDto } from '../dtos/seller.dto';
+import { SellerDto } from '../dtos/seller.dto';
 import { WeekDays } from '../dtos/base/enums/week-days.enum';
 
 export class PartialUpdateSellerMapper {
@@ -13,7 +13,7 @@ export class PartialUpdateSellerMapper {
     };
   }
 
-  public static toDTO(entity: Seller): ISellerDto {
+  public static toDTO(entity: Seller): SellerDto {
     return {
       code: entity.code,
       name: entity.name,

@@ -1,4 +1,4 @@
-import { WeekDays } from './week-days.enum';
+import { WeekDays } from './enums/week-days.enum';
 
 export interface IOpeningHours {
   weekDay: WeekDays,

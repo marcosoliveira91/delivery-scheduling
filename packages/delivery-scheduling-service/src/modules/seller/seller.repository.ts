@@ -1,10 +1,9 @@
 import ILogger from '../../shared/logger/logger.interface';
-import { CreateSellerQuery as CreateSellerQueryEntity } from './entities/queries/create-seller-query.entity';
 import { PartialUpdateSellerQuery as PartialUpdateSellerQueryEntity } from './entities/queries/partial-update-seller-query.entity';
 import { Seller } from './entities/seller.entity';
 
 export interface ISellerRepository {
-  create(query: CreateSellerQueryEntity): Seller;
+  create(query: Seller): Seller;
   findAll(): Seller[];
   partialUpdate(query: PartialUpdateSellerQueryEntity): Seller;
 }
@@ -47,7 +46,7 @@ class SellerRepository implements ISellerRepository {
     private readonly logger: ILogger,
   ) {}
 
-  create(query: CreateSellerQueryEntity): Seller {
+  create(query: Seller): Seller {
     try {
       // TODO: implement call to db
       if(mockSellers.find(seller => seller.name === query.name)) {

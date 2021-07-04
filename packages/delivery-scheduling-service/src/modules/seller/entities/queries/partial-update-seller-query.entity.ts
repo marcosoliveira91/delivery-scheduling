@@ -1,3 +1,3 @@
-import { CreateSellerQuery } from './create-seller-query.entity';
+import { Seller } from '../seller.entity';
 
-export type PartialUpdateSellerQuery = Partial<CreateSellerQuery> & { code: string; }
+export type PartialUpdateSellerQuery = Partial<Seller> & { code: string; }

@@ -1,5 +1,5 @@
-import { ISlotDto } from '../slot.dto';
+import { SlotDto } from '../slot.dto';
 
 export interface GetSlotsDto {
-  slots: ISlotDto[];
+  slots: SlotDto[];
 }

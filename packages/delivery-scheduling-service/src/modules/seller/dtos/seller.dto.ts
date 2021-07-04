@@ -1,6 +1,6 @@
-import { IOpeningHours } from './base/enums/opening-hours.interface';
+import { IOpeningHours } from './base/opening-hours.interface';
 
-export interface ISellerDto {
+export interface SellerDto {
   code: string;
   name: string;
   openingHours: IOpeningHours[]

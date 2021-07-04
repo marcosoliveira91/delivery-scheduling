@@ -1,9 +1,10 @@
 import ILogger from '../../shared/logger/logger.interface';
-import { IFindAllSlotsQuery } from './entities/query/find-all-slots-query.entity';
+import { FindAllSlotsQuery } from './entities/query/find-all-slots-query.entity';
 import { Slot } from './entities/slot.entity';
 
 export interface ISlotRepository {
-  findAll(query: IFindAllSlotsQuery): Slot[];
+  create(query: Slot): Slot;
+  findAll(query: FindAllSlotsQuery): Slot[];
 }
 
 // TODO: replace mock data
@@ -29,7 +30,29 @@ class SlotRepository implements ISlotRepository {
     private readonly logger: ILogger,
   ) {}
 
-  findAll(query: IFindAllSlotsQuery) : Slot[] {
+  create(query: Slot): Slot {
+    try {
+      // TODO: implement call to db
+      if(mockSlots.find(slot => slot.code === query.code)) {
+        throw new Error('Slot resource already exists');
+      }
+
+      mockSlots.push(query);
+      const result = mockSlots.find(slot => slot.code === query.code) ?? {} as Slot;
+
+      return result;
+    } catch (error) {
+      this.logger.error({
+        message: 'Error in SlotRepository.create',
+        data: { query },
+        error: error as Error,
+      });
+
+      throw error;
+    }
+  }
+
+  findAll(query: FindAllSlotsQuery) : Slot[] {
     try {
       const sellerSlots: Slot[] = mockSlots.filter(slot => slot.sellerCode === query.sellerCode);
 

@@ -4,13 +4,13 @@ import { ISellerRepository } from './seller.repository';
 import { PartialUpdateSellerQuery } from './entities/queries/partial-update-seller-query.entity';
 import { PartialUpdateSellerQueryDto } from './dtos/queries/partial-update-seller-query.dto';
 import { Seller } from './entities/seller.entity';
-import { ISellerDto } from './dtos/seller.dto';
+import { SellerDto } from './dtos/seller.dto';
 import { GetSellersDto } from './dtos/results/get-sellers.dto';
 
 export interface ISellerService {
   getSellers(): Promise<GetSellersDto>;
-  createSeller(query: CreateSellerQueryDto): Promise<ISellerDto>;
-  partialUpdateSeller(code: string, query: PartialUpdateSellerQueryDto): Promise<ISellerDto>;
+  createSeller(query: CreateSellerQueryDto): Promise<SellerDto>;
+  partialUpdateSeller(code: string, query: PartialUpdateSellerQueryDto): Promise<SellerDto>;
 }
 
 class SellerService implements ISellerService {
@@ -24,14 +24,14 @@ class SellerService implements ISellerService {
     return Promise.resolve(GetSellersMapper.toDTO(sellers));
   }
 
-  async createSeller(queryDto: CreateSellerQueryDto): Promise<ISellerDto> {
+  async createSeller(queryDto: CreateSellerQueryDto): Promise<SellerDto> {
     const queryEntity: Seller = CreateSellerMapper.toDomain(queryDto);
     const seller: Seller = this.sellerRepository.create(queryEntity);
 
     return Promise.resolve(CreateSellerMapper.toDTO(seller));
   }
 
-  async partialUpdateSeller(code: string, queryDto: PartialUpdateSellerQueryDto): Promise<ISellerDto> {
+  async partialUpdateSeller(code: string, queryDto: PartialUpdateSellerQueryDto): Promise<SellerDto> {
     const queryEntity: PartialUpdateSellerQuery = PartialUpdateSellerMapper.toDomain(code, queryDto);
     const seller: Seller = this.sellerRepository.partialUpdate(queryEntity);
 

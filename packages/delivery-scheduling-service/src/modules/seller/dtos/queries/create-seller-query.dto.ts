@@ -1,4 +1,4 @@
-import { IOpeningHours } from '../base/enums/opening-hours.interface';
+import { IOpeningHours } from '../base/opening-hours.interface';
 
 export interface CreateSellerQueryDto {
   name: string;

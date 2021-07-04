@@ -3,10 +3,10 @@ export interface Slot {
   sellerCode: string;
   startDate: string;
   endDate: string;
-  status: string, // 'AVAILABLE' | 'UNAVAILABLE';
+  status: string,
   duration: {
     raw: number;
-    unit: string; // 'HOUR' | 'MIN',
+    unit: string;
   },
   capacity: {
     original: number,
