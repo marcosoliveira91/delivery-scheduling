@@ -4,8 +4,9 @@ import { PartialUpdateSellerQuery as PartialUpdateSellerQueryEntity } from './en
 import { Seller } from './entities/seller.entity';
 
 export interface ISellerRepository {
-  createSeller(query: CreateSellerQueryEntity): Seller;
-  partialUpdateSeller(query: PartialUpdateSellerQueryEntity): Seller;
+  create(query: CreateSellerQueryEntity): Seller;
+  findAll(): Seller[];
+  partialUpdate(query: PartialUpdateSellerQueryEntity): Seller;
 }
 
 const mockSellers = [{
@@ -46,7 +47,7 @@ class SellerRepository implements ISellerRepository {
     private readonly logger: ILogger,
   ) {}
 
-  createSeller(query: CreateSellerQueryEntity): Seller {
+  create(query: CreateSellerQueryEntity): Seller {
     try {
       // TODO: implement call to db
       if(mockSellers.find(seller => seller.name === query.name)) {
@@ -59,7 +60,7 @@ class SellerRepository implements ISellerRepository {
       return result;
     } catch (error) {
       this.logger.error({
-        message: 'Error in SellerRepository.createSeller',
+        message: 'Error in SellerRepository.create',
         data: { query },
         error: error as Error,
       });
@@ -68,10 +69,28 @@ class SellerRepository implements ISellerRepository {
     }
   }
 
-  partialUpdateSeller(query: PartialUpdateSellerQueryEntity): Seller {
+  findAll() : Seller[] {
+    try {
+      return mockSellers ?? [];
+    } catch (error) {
+      this.logger.error({
+        message: 'Error in SellerRepository.findAll',
+        data: {},
+        error: error as Error,
+      });
+
+      throw error;
+    }
+  }
+
+  partialUpdate(query: PartialUpdateSellerQueryEntity): Seller {
     try {
       // TODO: implement call to db
-      const sellerFound = mockSellers.find(seller => seller.code === query.code) ?? {} as Seller;
+      const sellerFound = mockSellers.find(seller => seller.code === query.code);
+
+      if(!sellerFound) {
+        throw new Error(`Seller ${query.code} not found`);
+      }
 
       const result: Seller = {
         code: query.code,
@@ -82,7 +101,7 @@ class SellerRepository implements ISellerRepository {
       return result;
     } catch (error) {
       this.logger.error({
-        message: 'Error in SellerRepository.partialUpdateSeller',
+        message: 'Error in SellerRepository.partialUpdate',
         data: { query },
         error: error as Error,
       });
