@@ -1,21 +1,45 @@
 import { FastifySchema } from 'fastify/types/schema';
 import { JSONSchema7 as JsonSchema } from 'json-schema';
 import 'fastify-swagger';
+import { AvailableStatus } from '../dtos/base/enums/available-status.enum';
 
 const querySchema: JsonSchema = {
   type: 'object',
-  required: ['sellerCode'],
+  required: ['sellerCode', 'fromDate', 'toDate'],
   properties: {
     sellerCode: { type: 'string' },
-    startDate: {
-      type: 'string',
-      format: 'date',
+    fromDate: {
+      anyOf: [
+        {
+          type: 'string',
+          format: 'date-time',
+          description: 'ISO 8601 date time format in UTC time: YYYY-MM-DDThh:mm:ssZ',
+        },
+        {
+          type: 'string',
+          format: 'date',
+          description: 'ISO 8601 date format YYYY-MM-DD',
+        },
+      ],
     },
-    endDate: {
-      type: 'string',
-      format: 'date',
+    toDate: {
+      anyOf: [
+        {
+          type: 'string',
+          format: 'date-time',
+          description: 'ISO 8601 date time format in UTC time: YYYY-MM-DDThh:mm:ssZ',
+        },
+        {
+          type: 'string',
+          format: 'date',
+          description: 'ISO 8601 date format YYYY-MM-DD',
+        },
+      ],
     },
-    status: { type: 'string' }, // TODO: move to enum
+    status: {
+      type: 'string',
+      enum: Object.values(AvailableStatus),
+    },
   },
 };
 

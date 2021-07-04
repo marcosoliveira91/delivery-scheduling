@@ -6,6 +6,7 @@ import SlotController from '../../modules/slot/slot.controller';
 import SlotRepository from '../../modules/slot/slot.repository';
 import SlotService from '../../modules/slot/slot.service';
 import { ClassDependencies } from './types/index';
+import { Server } from '../server';
 
 const logger = Logger.getInstance();
 

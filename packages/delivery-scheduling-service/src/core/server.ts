@@ -1,3 +1,4 @@
+import Logger from '../shared/logger/logger';
 import fastify, {
   FastifyInstance,
   FastifyRequest,
@@ -30,10 +31,12 @@ export class Server {
     void this.instance.listen(port, '::')
       .then((address: string) => this.instance.log.info(`Server listening on ${address}`))
       .catch((error: Error) => {
-        this.instance.log.error({
+        Logger.getInstance().error({
           message: 'Error in Server.init',
+          data: {},
           error,
         });
+
         process.exit(1);
       });
   }
