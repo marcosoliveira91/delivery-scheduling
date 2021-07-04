@@ -7,7 +7,7 @@ import { WeekDays } from '../dtos/base/enums/week-days.enum';
 
 export class CreateSellerMapper {
 
-  public static toDomain (dto: CreateSellerQueryDto): Seller {
+  public static toDomain(dto: CreateSellerQueryDto): Seller {
     return {
       // id: uuid(),
       code: utils.generateReadableCode(dto.name),
@@ -21,7 +21,7 @@ export class CreateSellerMapper {
     };
   }
 
-  public static toDTO (entity: Seller): ISellerDto {
+  public static toDTO(entity: Seller): ISellerDto {
     return {
       code: entity.code,
       name: entity.name,

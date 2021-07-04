@@ -3,13 +3,18 @@ import { JSONSchema7 as JsonSchema } from 'json-schema';
 import 'fastify-swagger';
 
 const okResponseSchema: JsonSchema = {
-  type: 'array',
-  items: {
-    type: 'object',
-    properties: {
-      code: { type: 'string' },
-      name: { type: 'string' },
-      openingHours: { type: 'array' },
+  type: 'object',
+  properties: {
+    sellers: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          code: { type: 'string' },
+          name: { type: 'string' },
+          openingHours: { type: 'array' },
+        },
+      },
     },
   },
 };

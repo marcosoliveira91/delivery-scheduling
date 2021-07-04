@@ -1,5 +1,5 @@
 import { ISellerDto } from '../seller.dto';
 
-export interface IGetSellersDto {
+export interface GetSellersDto {
   sellers: ISellerDto[];
 }

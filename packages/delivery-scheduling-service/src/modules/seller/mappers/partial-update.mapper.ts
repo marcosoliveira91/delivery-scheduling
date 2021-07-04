@@ -6,14 +6,14 @@ import { WeekDays } from '../dtos/base/enums/week-days.enum';
 
 export class PartialUpdateSellerMapper {
 
-  public static toDomain (code:string, dto: PartialUpdateSellerQueryDto): PartialUpdateSellerQuery {
+  public static toDomain(code:string, dto: PartialUpdateSellerQueryDto): PartialUpdateSellerQuery {
     return {
       code,
       ...dto,
     };
   }
 
-  public static toDTO (entity: Seller): ISellerDto {
+  public static toDTO(entity: Seller): ISellerDto {
     return {
       code: entity.code,
       name: entity.name,

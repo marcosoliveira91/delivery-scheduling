@@ -1,10 +1,10 @@
+import { GetSellersDto } from '../dtos/results/get-sellers.dto';
 import { Seller } from '../entities/seller.entity';
 import { WeekDays } from '../dtos/base/enums/week-days.enum';
-import { IGetSellersDto } from '../dtos/results/get-sellers.dto';
 
 export class GetSellersMapper {
 
-  public static toDTO (entity: Seller[]): IGetSellersDto {
+  public static toDTO (entity: Seller[]): GetSellersDto {
     return {
       sellers: entity.map(seller => ({
         code: seller.code,

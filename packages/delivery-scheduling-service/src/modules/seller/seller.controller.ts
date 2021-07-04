@@ -3,14 +3,14 @@ import { PartialUpdateSellerQueryDto } from './dtos/queries/partial-update-selle
 import { ISellerDto } from './dtos/seller.dto';
 import { FastifyRequest } from 'fastify';
 import { ISellerService } from './seller.service';
-import { IGetSellersDto } from './dtos/results/get-sellers.dto';
+import { GetSellersDto } from './dtos/results/get-sellers.dto';
 
 class SellerController {
   constructor(
     private readonly sellerService: ISellerService,
   ) {}
 
-  getSellers = (): Promise<IGetSellersDto> => {
+  getSellers = (): Promise<GetSellersDto> => {
     return this.sellerService.getSellers();
   }
 

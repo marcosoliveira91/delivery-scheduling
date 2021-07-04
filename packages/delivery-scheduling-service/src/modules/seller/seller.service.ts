@@ -5,10 +5,10 @@ import { PartialUpdateSellerQuery } from './entities/queries/partial-update-sell
 import { PartialUpdateSellerQueryDto } from './dtos/queries/partial-update-seller-query.dto';
 import { Seller } from './entities/seller.entity';
 import { ISellerDto } from './dtos/seller.dto';
-import { IGetSellersDto } from './dtos/results/get-sellers.dto';
+import { GetSellersDto } from './dtos/results/get-sellers.dto';
 
 export interface ISellerService {
-  getSellers(): Promise<IGetSellersDto>;
+  getSellers(): Promise<GetSellersDto>;
   createSeller(query: CreateSellerQueryDto): Promise<ISellerDto>;
   partialUpdateSeller(code: string, query: PartialUpdateSellerQueryDto): Promise<ISellerDto>;
 }
@@ -18,7 +18,7 @@ class SellerService implements ISellerService {
     private readonly sellerRepository: ISellerRepository
   ) {}
 
-  async getSellers(): Promise<IGetSellersDto> {
+  async getSellers(): Promise<GetSellersDto> {
     const sellers: Seller[] = this.sellerRepository.findAll();
 
     return Promise.resolve(GetSellersMapper.toDTO(sellers));

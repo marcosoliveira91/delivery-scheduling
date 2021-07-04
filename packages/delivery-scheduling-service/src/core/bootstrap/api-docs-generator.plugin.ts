@@ -23,6 +23,10 @@ export class ApiDocsGeneratorPlugin {
             name: 'Seller',
             description: 'Seller related end-points',
           },
+          {
+            name: 'Slot',
+            description: 'Slot related end-points',
+          },
         ],
       },
       exposeRoute,
