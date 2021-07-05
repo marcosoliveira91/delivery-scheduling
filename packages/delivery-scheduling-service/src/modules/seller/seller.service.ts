@@ -19,23 +19,23 @@ class SellerService implements ISellerService {
   ) {}
 
   async getSellers(): Promise<GetSellersDto> {
-    const sellers: Seller[] = this.sellerRepository.findAll();
+    const sellers: Seller[] = await this.sellerRepository.findAll();
 
     return Promise.resolve(GetSellersMapper.toDTO(sellers));
   }
 
   async createSeller(queryDto: CreateSellerQueryDto): Promise<SellerDto> {
     const queryEntity: Seller = CreateSellerMapper.toDomain(queryDto);
-    const seller: Seller = this.sellerRepository.create(queryEntity);
+    const seller: Seller = await this.sellerRepository.create(queryEntity);
 
-    return Promise.resolve(CreateSellerMapper.toDTO(seller));
+    return CreateSellerMapper.toDTO(seller);
   }
 
   async partialUpdateSeller(code: string, queryDto: PartialUpdateSellerQueryDto): Promise<SellerDto> {
     const queryEntity: PartialUpdateSellerQuery = PartialUpdateSellerMapper.toDomain(code, queryDto);
-    const seller: Seller = this.sellerRepository.partialUpdate(queryEntity);
+    const seller: Seller = await this.sellerRepository.partialUpdate(queryEntity);
 
-    return Promise.resolve(PartialUpdateSellerMapper.toDTO(seller));
+    return PartialUpdateSellerMapper.toDTO(seller);
   }
 }
 

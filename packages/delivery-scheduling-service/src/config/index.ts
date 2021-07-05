@@ -25,6 +25,26 @@ const config = convict<IConfig>({
       default: true,
     },
   },
+  db: {
+    connection: {
+      host: {
+        default: 'timeslots.jnyag.mongodb.net',
+        env: 'DB_HOST',
+      },
+      user: {
+        default: 'root',
+        env: 'DB_USER',
+      },
+      password: {
+        default: 'test',
+        env: 'DB_PASSWORD',
+      },
+      database: {
+        default: 'timeslots',
+        env: 'DB_NAME',
+      },
+    },
+  },
 });
 
 config.validate({ allowed: 'strict' });

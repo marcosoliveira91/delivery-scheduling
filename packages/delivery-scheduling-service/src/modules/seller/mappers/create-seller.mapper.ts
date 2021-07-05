@@ -9,7 +9,7 @@ export class CreateSellerMapper {
 
   public static toDomain(dto: CreateSellerQueryDto): Seller {
     return {
-      code: utils.generateReadableCode(dto.name),
+      code: utils.generateReadableCode(dto.name, dto.name.length),
       ...dto,
     };
   }

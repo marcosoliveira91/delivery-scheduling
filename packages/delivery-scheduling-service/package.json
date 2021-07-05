@@ -68,6 +68,7 @@
     "fastify-swagger": "^4.8.2",
     "hashids": "^2.2.8",
     "inversify": "^5.1.1",
+    "mongoose": "^5.13.2",
     "pino": "^6.11.3",
     "reflect-metadata": "^0.1.13"
   }

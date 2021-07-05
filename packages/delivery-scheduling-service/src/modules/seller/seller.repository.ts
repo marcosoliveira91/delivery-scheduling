@@ -1,44 +1,13 @@
 import ILogger from '../../shared/logger/logger.interface';
 import { PartialUpdateSellerQuery as PartialUpdateSellerQueryEntity } from './entities/queries/partial-update-seller-query.entity';
 import { Seller } from './entities/seller.entity';
+import { SellerDAO } from '../../shared/database/mongoose/models/seller.dao';
 
 export interface ISellerRepository {
-  create(query: Seller): Seller;
-  findAll(): Seller[];
-  partialUpdate(query: PartialUpdateSellerQueryEntity): Seller;
+  create(query: Seller): Promise<Seller>;
+  findAll(): Promise<Seller[]>;
+  partialUpdate(query: PartialUpdateSellerQueryEntity): Promise<Seller>;
 }
-
-const mockSellers = [{
-  'code': '41YPMX30G4',
-  'name': 'Pingo Doce',
-  'openingHours': [
-    {
-      'weekDay': 'MON',
-      'startTime': '08:00',
-      'endTime': '19:00',
-    },
-    {
-      'weekDay': 'TUE',
-      'startTime': '08:00',
-      'endTime': '19:00',
-    },
-    {
-      'weekDay': 'WED',
-      'startTime': '08:00',
-      'endTime': '19:00',
-    },
-    {
-      'weekDay': 'THU',
-      'startTime': '08:00',
-      'endTime': '19:00',
-    },
-    {
-      'weekDay': 'FRI',
-      'startTime': '08:00',
-      'endTime': '19:00',
-    },
-  ],
-}];
 
 class SellerRepository implements ISellerRepository {
 
@@ -46,17 +15,18 @@ class SellerRepository implements ISellerRepository {
     private readonly logger: ILogger,
   ) {}
 
-  create(query: Seller): Seller {
+  async create(query: Seller): Promise<Seller> {
     try {
-      // TODO: implement call to db
-      if(mockSellers.find(seller => seller.name === query.name)) {
+      const found = await SellerDAO.findOne({ code: query.code }).lean();
+
+      if (found) {
         throw new Error('Seller resource already exists');
       }
 
-      mockSellers.push(query);
-      const result = mockSellers.find(seller => seller.code === query.code) ?? {} as Seller;
+      const newSeller = new SellerDAO(query);
+      const created = await newSeller.save();
 
-      return result;
+      return created ?? {};
     } catch (error) {
       this.logger.error({
         message: 'Error in SellerRepository.create',
@@ -68,9 +38,11 @@ class SellerRepository implements ISellerRepository {
     }
   }
 
-  findAll() : Seller[] {
+  async findAll() : Promise<Seller[]> {
     try {
-      return mockSellers ?? [];
+      const all = await SellerDAO.find().lean() ?? [];
+
+      return all;
     } catch (error) {
       this.logger.error({
         message: 'Error in SellerRepository.findAll',
@@ -82,22 +54,22 @@ class SellerRepository implements ISellerRepository {
     }
   }
 
-  partialUpdate(query: PartialUpdateSellerQueryEntity): Seller {
+  async partialUpdate(query: PartialUpdateSellerQueryEntity): Promise<Seller> {
     try {
-      // TODO: implement call to db
-      const sellerFound = mockSellers.find(seller => seller.code === query.code);
+      const { code, ...fields } = query;
+      const conditions = { code };
+      const toUpdate = { ...fields };
+      const withOptions = {
+        new: true,
+      };
 
-      if(!sellerFound) {
+      const updated = await SellerDAO.findOneAndUpdate(conditions, toUpdate, withOptions).lean();
+
+      if(!updated) {
         throw new Error(`Seller ${query.code} not found`);
       }
 
-      const result: Seller = {
-        code: query.code,
-        name: query.name ?? sellerFound.name,
-        openingHours: query.openingHours ?? sellerFound.openingHours,
-      };
-
-      return result;
+      return updated;
     } catch (error) {
       this.logger.error({
         message: 'Error in SellerRepository.partialUpdate',

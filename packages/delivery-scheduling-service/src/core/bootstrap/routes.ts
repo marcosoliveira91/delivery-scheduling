@@ -1,5 +1,5 @@
-import * as sellerSchemas from '../../modules/seller/schemas';
-import * as slotSchemas from '../../modules/slot/schemas';
+import * as sellerSchemas from '../../modules/seller/routes-schemas';
+import * as slotSchemas from '../../modules/slot/routes-schemas';
 import SellerController from '../../modules/seller/seller.controller';
 import SlotController from '../../modules/slot/slot.controller';
 import { IocContainer } from '../ioc/container';
