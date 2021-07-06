@@ -1,8 +1,8 @@
 import { SlotDto } from '../slot.dto';
 
-type T = Pick<SlotDto, 'status' | 'capacity' | 'duration'>;
-type PartialSlotQuery = Partial<T>;
-type RequiredQueryDto = Omit<SlotDto, keyof T | 'code'>;
+type OptionalKeys = Pick<SlotDto, 'status' | 'isAvailable' | 'capacity' | 'duration'>;
+type PartialSlotQuery = Partial<OptionalKeys>;
+type RequiredQueryDto = Omit<SlotDto, keyof OptionalKeys | 'code'>;
 
 export interface CreateSlotQueryDto extends RequiredQueryDto, PartialSlotQuery {}
 

@@ -1,11 +1,11 @@
 import * as utils from '../../../shared/utils';
+import { AvailabilityStatus } from '../dtos/base/enums/availability-status.enum';
 import { CreateSlotQueryDto } from '../dtos/queries/create-slot-query.dto';
-import { Slot } from '../entities/slot.entity';
-import { SlotDto } from '../dtos/slot.dto';
 import { ICapacity } from '../dtos/base/capacity.interface';
 import { IDuration } from '../dtos/base/duration.interface';
-import { TimeUnits } from '../dtos/base/enums/time-unit.enum';
-import { AvailableStatus } from '../dtos/base/enums/available-status.enum';
+import { Slot } from '../entities/slot.entity';
+import { SlotDto } from '../dtos/slot.dto';
+import { TimeUnits } from '../../../shared/interfaces/enums/time-unit.enum';
 
 export class CreateSlotMapper {
 
@@ -21,21 +21,25 @@ export class CreateSlotMapper {
     };
 
     return {
+      ...dto,
       code: utils.generateReadableCode(dto.sellerCode, encoder),
-      status: capacity.current ? AvailableStatus.Available : AvailableStatus.Unavailable,
+      status: capacity.current ? AvailabilityStatus.Available : AvailabilityStatus.Unavailable,
+      isAvailable: capacity.current > 0,
       capacity,
       duration,
-      ...dto,
+      startDate: utils.normalizeDate(new Date(dto.startDate)).toISOString(),
+      endDate: utils.normalizeDate(new Date(dto.endDate)).toISOString(),
     };
   }
 
   public static toDTO(entity: Slot): SlotDto {
     return {
       code: entity.code,
-      status: entity.status as AvailableStatus,
+      status: entity.status as AvailabilityStatus,
+      isAvailable: entity.isAvailable,
       sellerCode: entity.sellerCode,
-      startDate: entity.startDate,
-      endDate: entity.endDate,
+      startDate: entity.startDate as string,
+      endDate: entity.endDate as string,
       duration: {
         raw: entity.duration.raw,
         unit: entity.duration.unit,

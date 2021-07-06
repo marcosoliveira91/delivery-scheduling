@@ -23,23 +23,23 @@ class SlotService implements ISlotService {
 
   async getSlots(queryDto: GetSlotsQueryDto): Promise<GetSlotsDto> {
     const queryEntity: FindAllSlotsQuery = GetSlotsMapper.toDomain(queryDto);
-    const slots: Slot[] = this.slotRepository.findAll(queryEntity);
+    const slots: Slot[] = await this.slotRepository.findAllUpcoming(queryEntity);
 
-    return Promise.resolve(GetSlotsMapper.toDTO(slots));
+    return GetSlotsMapper.toDTO(slots);
   }
 
   async createSlot(queryDto: CreateSlotQueryDto): Promise<SlotDto> {
     const queryEntity: Slot = CreateSlotMapper.toDomain(queryDto);
-    const slot: Slot = this.slotRepository.create(queryEntity);
+    const slot: Slot = await this.slotRepository.create(queryEntity);
 
-    return Promise.resolve(CreateSlotMapper.toDTO(slot));
+    return CreateSlotMapper.toDTO(slot);
   }
 
   async bookSlot(code: string, queryDto: BookSlot): Promise<SlotDto | void> {
     const queryEntity: BookSlotQuery = BookSlotMapper.toDomain(code, queryDto);
-    const result = this.slotRepository.createOrUpdate(queryEntity);
+    const result = await this.slotRepository.upsert(queryEntity);
 
-    return Promise.resolve(result ? CreateSlotMapper.toDTO(result) : undefined);
+    return result ? CreateSlotMapper.toDTO(result) : undefined;
   }
 }
 

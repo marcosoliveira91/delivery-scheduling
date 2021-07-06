@@ -1,6 +1,6 @@
 import { FastifySchema } from 'fastify/types/schema';
 import { JSONSchema7 as JsonSchema } from 'json-schema';
-import { WeekDays } from '../dtos/base/enums/week-days.enum';
+import { WeekDays } from '../../../shared/interfaces/enums';
 import 'fastify-swagger';
 
 // HH:MM 24-hour format, optional leading 0

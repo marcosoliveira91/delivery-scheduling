@@ -45,6 +45,16 @@ const config = convict<IConfig>({
       },
     },
   },
+  businessRules: {
+    teamCapacity: {
+      default: 2,
+      env: 'BUSINESS_DEFAULT_TEAM_CAPACITY',
+    },
+    slotDurationInMin: {
+      default: 30,
+      env: 'BUSINESS_DEFAULT_SLOT_DURATION_MINUTES',
+    },
+  },
 });
 
 config.validate({ allowed: 'strict' });

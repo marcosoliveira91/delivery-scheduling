@@ -12,5 +12,9 @@ export interface IConfig {
       password: string;
       database: string;
     }
+  },
+  businessRules: {
+    teamCapacity: number;
+    slotDurationInMin: number;
   }
 }

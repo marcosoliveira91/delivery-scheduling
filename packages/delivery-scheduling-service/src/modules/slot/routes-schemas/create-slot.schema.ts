@@ -8,6 +8,7 @@ const bodySchema: JsonSchema = {
   properties: {
     sellerCode: { type: 'string'},
     status: { type: 'string' },
+    isAvailable: { type: 'boolean' },
     startDate: { type: 'string' },
     endDate: { type: 'string' },
     duration: {
@@ -42,6 +43,7 @@ const okResponseSchema: JsonSchema = {
     code: { type: 'string' },
     sellerCode: { type: 'string'},
     status: { type: 'string' },
+    isAvailable: { type: 'boolean' },
     startDate: { type: 'string' },
     endDate: { type: 'string' },
     duration: {

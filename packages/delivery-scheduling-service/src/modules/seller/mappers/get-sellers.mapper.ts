@@ -1,6 +1,6 @@
 import { GetSellersDto } from '../dtos/results/get-sellers.dto';
 import { Seller } from '../entities/seller.entity';
-import { WeekDays } from '../dtos/base/enums/week-days.enum';
+import { WeekDays } from '../../../shared/interfaces/enums';
 
 export class GetSellersMapper {
 

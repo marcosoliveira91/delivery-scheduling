@@ -57,13 +57,13 @@ class SellerRepository implements ISellerRepository {
   async partialUpdate(query: PartialUpdateSellerQueryEntity): Promise<Seller> {
     try {
       const { code, ...fields } = query;
-      const conditions = { code };
+      const filters = { code };
       const toUpdate = { ...fields };
       const withOptions = {
         new: true,
       };
 
-      const updated = await SellerDAO.findOneAndUpdate(conditions, toUpdate, withOptions).lean();
+      const updated = await SellerDAO.findOneAndUpdate(filters, toUpdate, withOptions).lean();
 
       if(!updated) {
         throw new Error(`Seller ${query.code} not found`);

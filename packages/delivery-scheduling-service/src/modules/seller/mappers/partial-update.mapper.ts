@@ -2,7 +2,7 @@ import { PartialUpdateSellerQuery } from '../entities/queries/partial-update-sel
 import { PartialUpdateSellerQueryDto } from '../dtos/queries/partial-update-seller-query.dto';
 import { Seller } from '../entities/seller.entity';
 import { SellerDto } from '../dtos/seller.dto';
-import { WeekDays } from '../dtos/base/enums/week-days.enum';
+import { WeekDays } from '../../../shared/interfaces/enums';
 
 export class PartialUpdateSellerMapper {
 

@@ -1,11 +1,11 @@
 import { FastifySchema } from 'fastify/types/schema';
 import { JSONSchema7 as JsonSchema } from 'json-schema';
 import 'fastify-swagger';
-import { AvailableStatus } from '../dtos/base/enums/available-status.enum';
+import { AvailabilityStatus } from '../dtos/base/enums/availability-status.enum';
 
 const querySchema: JsonSchema = {
   type: 'object',
-  required: ['sellerCode', 'fromDate', 'toDate'],
+  required: ['sellerCode', 'untilDate'],
   properties: {
     sellerCode: { type: 'string' },
     fromDate: {
@@ -22,7 +22,7 @@ const querySchema: JsonSchema = {
         },
       ],
     },
-    toDate: {
+    untilDate: {
       anyOf: [
         {
           type: 'string',
@@ -38,7 +38,7 @@ const querySchema: JsonSchema = {
     },
     status: {
       type: 'string',
-      enum: Object.values(AvailableStatus),
+      enum: Object.values(AvailabilityStatus),
     },
   },
 };
@@ -54,6 +54,7 @@ const okResponseSchema: JsonSchema = {
           code: { type: 'string' },
           sellerCode: { type: 'string' },
           status: { type: 'string' },
+          isAvailable: { type: 'boolean' },
           startDate: { type: 'string' },
           endDate: { type: 'string' },
           duration: {

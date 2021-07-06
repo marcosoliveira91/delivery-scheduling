@@ -1,8 +1,8 @@
-import { AvailableStatus } from '../base/enums/available-status.enum';
+import { AvailabilityStatus } from '../base/enums/availability-status.enum';
 
 export interface GetSlotsQueryDto {
   sellerCode: string;
-  fromDate: string;
-  toDate: string;
-  status?: AvailableStatus,
+  fromDate?: string;
+  untilDate: string;
+  status?: AvailabilityStatus,
 }

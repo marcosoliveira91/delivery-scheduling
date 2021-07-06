@@ -1,5 +1,5 @@
-import { CreateSlotQueryDto } from './create-slot-query.dto';
+import { SlotDto } from '../slot.dto';
 
-export type BookSlot = CreateSlotQueryDto & {
+export type BookSlot = Pick<SlotDto, 'sellerCode'> & {
   customerCode: string;
-}
+};

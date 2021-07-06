@@ -5,5 +5,5 @@ export interface Seller {
     weekDay: string,
     startTime: string;
     endTime: string;
-  }[]
+  }[],
 }

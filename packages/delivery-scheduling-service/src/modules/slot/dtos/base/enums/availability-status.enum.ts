@@ -1,4 +1,4 @@
-export enum AvailableStatus {
+export enum AvailabilityStatus {
   Available = 'AVAILABLE',
   Unavailable = 'UNAVAILABLE',
 }

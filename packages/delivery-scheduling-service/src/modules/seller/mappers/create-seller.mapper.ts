@@ -2,8 +2,7 @@ import * as utils from '../../../shared/utils';
 import { CreateSellerQueryDto } from '../dtos/queries/create-seller-query.dto';
 import { Seller } from '../entities/seller.entity';
 import { SellerDto } from '../dtos/seller.dto';
-// import { v4 as uuid } from 'uuid';
-import { WeekDays } from '../dtos/base/enums/week-days.enum';
+import { WeekDays } from '../../../shared/interfaces/enums';
 
 export class CreateSellerMapper {
 
