@@ -13,7 +13,7 @@ const config = convict<IConfig>({
     arg: 'port',
     default: 3001,
     doc: 'Port to bind',
-    env: 'PORT',
+    env: 'SERVER_PORT',
     format: 'port',
   },
   cors: {

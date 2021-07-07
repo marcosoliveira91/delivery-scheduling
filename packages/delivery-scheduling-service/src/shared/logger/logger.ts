@@ -2,7 +2,7 @@ import pino, { Logger as PinoLogger } from 'pino';
 import ILogger from './logger.interface';
 import * as messages from './messages';
 
-class Logger implements ILogger{
+class Logger implements ILogger {
   private static instance: Logger;
   private readonly fileLogger: PinoLogger;
   private readonly consoleLogger: PinoLogger;

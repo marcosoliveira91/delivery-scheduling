@@ -70,7 +70,6 @@
     "inversify": "^5.1.1",
     "mongoose": "^5.13.2",
     "pino": "^6.11.3",
-    "reflect-metadata": "^0.1.13",
-    "rrule": "^2.6.8"
+    "reflect-metadata": "^0.1.13"
   }
 }
