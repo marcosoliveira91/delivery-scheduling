@@ -1,6 +1,7 @@
+import { Seller } from './seller.interface';
 import { Slot } from './slot.interface';
 
 export interface Schedule {
-  sellerCode: string;
+  seller: Pick<Seller, 'name'> & { code?: string };
   slots: Slot[],
 }

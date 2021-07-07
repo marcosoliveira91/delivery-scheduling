@@ -1,7 +1,13 @@
 import { RRule } from 'rrule';
 
 export interface IDateUtils {
-
+  addDays(date: Date, days: number): Date;
+  datesToStringArr(dates: Date[]): string[];
+  toTimeSlotFormat(dateStart: Date, dateEnd: Date): string[];
+  getDatesUntil(from: Date, daysCount: number): string[];
+  normalizeDate(date: Date): Date;
+  format(date: Date | string, options?: Intl.DateTimeFormatOptions): string
+  utc(date: Date): number;
 }
 
 export default class DateUtils implements IDateUtils {
@@ -23,8 +29,15 @@ export default class DateUtils implements IDateUtils {
     return result;
   }
 
-  public getDateStr(dates: Date[]): string[] {
+  public datesToStringArr(dates: Date[]): string[] {
     return dates.map(d => d.toISOString().split('T')[0]);
+  }
+
+  public toTimeSlotFormat(startDatetime: Date | string, endDatetime: Date | string): string[] {
+    const from = this.format(startDatetime, { timeStyle: 'short' });
+    const to = this.format(endDatetime, { timeStyle: 'short' });
+
+    return [from, to];
   }
 
   public getDatesUntil(from: Date, daysCount: number): string[] {
@@ -37,13 +50,17 @@ export default class DateUtils implements IDateUtils {
       interval: 1,
     });
 
-    return this.getDateStr(rrule.all());
+    return this.datesToStringArr(rrule.all());
   }
 
   public normalizeDate(date: Date): Date {
     date.setSeconds(0);
     date.setMilliseconds(0);
     return date;
+  }
+
+  public format(date: Date | string, options?: Intl.DateTimeFormatOptions): string {
+    return new Intl.DateTimeFormat('pt-PT', { ...options }).format(new Date(date));
   }
 
   public utc(date: Date): number {
