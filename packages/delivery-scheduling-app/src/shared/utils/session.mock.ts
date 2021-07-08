@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
  * Should be replaced for proper session/auth servie
  */
 export const mockGetUserSession = (): { uuid: string, role: string } => {
-  const stored = sessionStorage.getItem('user');
+  const stored = window.sessionStorage.getItem('user');
 
   if (!stored) {
     const user = {
@@ -22,4 +22,18 @@ export const mockGetUserSession = (): { uuid: string, role: string } => {
   }
 
   return JSON.parse(stored);
+};
+
+export const mockNewUserSession = (role: 'customer' | 'admin' ): { uuid: string, role: string } => {
+  const user = {
+    role,
+    uuid: uuidv4(),
+  };
+
+  sessionStorage.setItem('user', JSON.stringify(user));
+  return user;
+};
+
+export const mockClearUserSession = (): void => {
+  sessionStorage.removeItem('user');
 };

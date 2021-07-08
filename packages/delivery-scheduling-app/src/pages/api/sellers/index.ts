@@ -1,10 +1,27 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import axios from 'axios';
+import { Seller } from '../../../interfaces/seller.interface';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
-const handler = async (_req: NextApiRequest, res: NextApiResponse): Promise<void> => {
+type ResponseError = {
+    statusCode: 500,
+    message: string,
+}
+
+export const getSellers = async (): Promise<{ sellers: Seller[] }> => {
   try {
+    const api = process.env.apiBaseUrl as string;
+    const url = `${api}/sellers`;
+    const { data } = await axios.get<{ sellers: Seller[] }>(url);
 
-    // TODO: implement api calls
-    const data = await Promise.resolve({});
+    return data;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const handler = async (_req: NextApiRequest, res: NextApiResponse<{ sellers: Seller[] } | ResponseError>): Promise<void>  => {
+  try {
+    const data = await getSellers();
 
     res.status(200).json(data);
   } catch (err) {

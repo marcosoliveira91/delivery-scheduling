@@ -1,10 +1,8 @@
-/* eslint-disable no-console */
 import DateUtils from '../shared/utils/date-utils';
 import styles from '../styles/components/SellerScheduleDays.module.scss';
-import { Tabs, Radio } from 'antd';
+import { SlotsList } from './SlotsList';
+import { Tabs } from 'antd';
 import { Slot } from '../interfaces';
-// import { useEffect, useState } from 'react';
-// import axios from 'axios';
 
 const { TabPane } = Tabs;
 
@@ -14,39 +12,10 @@ interface SellerScheduleDaysProps {
 }
 
 export const SellerScheduleDays: React.FC<SellerScheduleDaysProps> = ({ dates, sellerSlots }: SellerScheduleDaysProps) => {
-  const DateUtil = DateUtils.getInstance();
-  const SlotsList: React.FC<{ slots: Slot[] }> = ({ slots }: { slots: Slot[] }) => {
-    slots.sort((a,b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
-
-    return (
-      <div className={styles.slotsList}>
-        <Radio.Group
-          name={`radiogroup-${slots[0].sellerCode}`}
-          key={slots[0].sellerCode}
-          buttonStyle='solid'
-          optionType='button'
-          size='middle'
-          style={{ marginTop: 16 }}>
-          {
-            slots?.map(slot => {
-              const [from, to]: string[] = DateUtil.toTimeSlotFormat(slot.startDate, slot.endDate);
-
-              return (
-                <Radio.Button key={slot.code} value={slot.code} disabled={!slot.isAvailable} defaultChecked={false}>
-                  {from} - {to}
-                </Radio.Button>
-              );
-            })
-          }
-        </Radio.Group>
-      </div>
-    );
-  };
-
   return (
     <Tabs className={styles.datesTabs} defaultActiveKey='0' tabPosition={'top'} centered type='card'>
       {dates.sort().map(day => {
-        // const DateUtil = DateUtils.getInstance();
+        const DateUtil = DateUtils.getInstance();
         const threeLetterDay: string = DateUtil.format(day, { weekday: 'short' }).slice(0, 3);
         const dayDigit: string = DateUtil.format(day, { day: 'numeric' });
         const formattedDay = DateUtil.format(day, {

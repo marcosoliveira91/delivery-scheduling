@@ -1,19 +1,18 @@
-import axios from 'axios';
 import DateUtils from '../../../shared/utils/date-utils';
 import styles from '../../../styles/pages/schedule.module.scss';
-// import { CheckoutScheduleStepPanel } from '../../../components/CheckoutScheduleStepPanel';
 import { CheckoutStepBar } from '../../../components/CheckoutStepBar';
+import { getSellers } from '../../api/sellers';
 import { GetServerSideProps } from 'next';
+import { getSlots } from '../../api/slots';
 import { Layout } from 'antd';
-import { Schedule, Slot } from 'delivery-scheduling-app/src/interfaces';
-import { Seller } from 'delivery-scheduling-app/src/interfaces/seller.interface';
-
-const { Content } = Layout;
+import { Schedule, Seller } from '../../../interfaces';
 
 export interface SchedulesProps {
   schedules: Schedule[],
   dates: string[],
 }
+
+const { Content } = Layout;
 
 const CheckoutSchedule: React.FC<SchedulesProps> = ({ schedules, dates }: SchedulesProps) => (
   <div className='page-container schedule-page'>
@@ -22,22 +21,17 @@ const CheckoutSchedule: React.FC<SchedulesProps> = ({ schedules, dates }: Schedu
         currentStep={schedules?.length ? 2 : 0}
         {...{
           schedules,
-          dates}
-        }
+          dates,
+        }}
       />
     </Content>
   </div>
 );
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const api = process.env?.SERVER_API_BASE_URL;
-
-  if (!api) {
-    throw new Error('API not found');
-  }
-
   const query = ctx.query;
   const sellerCode = query.seller;
+  const DateUtil = DateUtils.getInstance();
 
   if (!sellerCode) {
     return { props: {} };
@@ -45,23 +39,25 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const timeWindowDays = 15;
   const now = new Date();
-  const twoWeeksWindow = DateUtils.getInstance().addDays(new Date(), timeWindowDays);
-  const dates: string[] = DateUtils.getInstance().getDatesUntil(now, timeWindowDays);
+  const twoWeeksWindow = DateUtil.addDays(new Date(), timeWindowDays);
+  const dates: string[] = DateUtil.getDatesUntil(now, timeWindowDays);
   const sellerCodes: string[] = Array.isArray(sellerCode) ? sellerCode : [...[sellerCode]];
-  const sellersResp = await axios.get<{ sellers: Seller[] }>(`${api}/sellers`);
+  const { sellers } = await getSellers();
 
   const promises = sellerCodes.map(async (code) => {
-    const foundSeller: Seller = sellersResp?.data?.sellers.find(el => el.code === code);
+    const foundSeller: Seller = sellers?.find(seller => seller.code === code);
 
-    const url = `${api}/slots?sellerCode=${code}&untilDate=${twoWeeksWindow.toISOString()}`;
-    const { data } = await axios.get<{ slots: Slot[] }>(url);
+    const { slots } = await getSlots({
+      sellerCode: code,
+      untilDate: twoWeeksWindow.toISOString(),
+    });
 
     return {
       seller: {
         code,
-        name: foundSeller.name,
+        name: foundSeller?.name,
       },
-      slots: data.slots,
+      slots,
     };
   });
 

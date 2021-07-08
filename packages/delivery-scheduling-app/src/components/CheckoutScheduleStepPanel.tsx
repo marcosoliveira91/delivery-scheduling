@@ -1,11 +1,11 @@
-import axios from 'axios';
-import { mockGetUserSession } from '../shared/utils/session.mock';
 import styles from '../styles/components/CheckoutScheduleStepPanel.module.scss';
+import { bookSlot } from '../pages/api/slots/book';
 import { Button, Form, message } from 'antd';
+import { mockGetUserSession } from '../shared/utils/session.mock';
 import { Schedule } from '../interfaces/schedule.interface';
 import { SchedulesProps } from '../pages/checkout/schedule/index';
 import { SellerScheduleDays } from './SellerScheduleDays';
-/* eslint-disable no-console */
+import { useEffect, useState } from 'react';
 
 interface CheckoutScheduleStepPanelProps {
   schedules: Schedule[],
@@ -13,27 +13,31 @@ interface CheckoutScheduleStepPanelProps {
 }
 
 export const CheckoutScheduleStepPanel: React.FC<SchedulesProps> = ({ schedules, dates }: CheckoutScheduleStepPanelProps) => {
+  const [loggedUser, updateLoggedUser] = useState({
+    role: '',
+    uuid: '',
+  });
+
+  useEffect(() => {
+    updateLoggedUser({...mockGetUserSession()});
+  },[]);
+
   const onFinish = async (values: Record<string, string>) => {
-    console.log('Received values of form: ', values);
-    try {
-      const promises = Object.keys(values).map(sellerCode => {
-        const api = process.env.apiBaseUrl;
-        const url = `${String(api)}/slots/${values[sellerCode]}/book`;
 
-        return axios.put<{customerCode: string; sellerCode: string;}>(
-          url,
-          {
-            customerCode: mockGetUserSession().uuid,
-            sellerCode,
-          });
+    const promises = Object.keys(values).map(sellerCode => {
+      return bookSlot({
+        code: values[sellerCode],
+        sellerCode,
+        customerCode: loggedUser?.uuid,
       });
+    });
 
-      const data = await Promise.all(promises);
-
-      console.log(data);
+    try {
+      await Promise.all(promises);
       return message.success('Horário seleccionado');
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
       return message.error('Isto foi embaraçoso... Por favor, volte a tentar.');
     }
   };
@@ -57,9 +61,7 @@ export const CheckoutScheduleStepPanel: React.FC<SchedulesProps> = ({ schedules,
             </section>
           </Form.Item>
         ))}
-        <Form.Item
-          className={styles.schedulesFormButtonWrapper}
-        >
+        <Form.Item className={styles.schedulesFormButtonWrapper}>
           <Button
             className={styles.schedulesFormButton}
             type='primary'
