@@ -1,9 +1,11 @@
-/* eslint-disable no-console */
+import axios from 'axios';
+import { mockGetUserSession } from '../shared/utils/session.mock';
 import styles from '../styles/components/CheckoutScheduleStepPanel.module.scss';
+import { Button, Form, message } from 'antd';
 import { Schedule } from '../interfaces/schedule.interface';
 import { SchedulesProps } from '../pages/checkout/schedule/index';
 import { SellerScheduleDays } from './SellerScheduleDays';
-import { Button, Form } from 'antd';
+/* eslint-disable no-console */
 
 interface CheckoutScheduleStepPanelProps {
   schedules: Schedule[],
@@ -11,8 +13,29 @@ interface CheckoutScheduleStepPanelProps {
 }
 
 export const CheckoutScheduleStepPanel: React.FC<SchedulesProps> = ({ schedules, dates }: CheckoutScheduleStepPanelProps) => {
-  const onFinish = (values: Record<string, string>) => {
+  const onFinish = async (values: Record<string, string>) => {
     console.log('Received values of form: ', values);
+    try {
+      const promises = Object.keys(values).map(sellerCode => {
+        const api = process.env.apiBaseUrl;
+        const url = `${String(api)}/slots/${values[sellerCode]}/book`;
+
+        return axios.put<{customerCode: string; sellerCode: string;}>(
+          url,
+          {
+            customerCode: mockGetUserSession().uuid,
+            sellerCode,
+          });
+      });
+
+      const data = await Promise.all(promises);
+
+      console.log(data);
+      return message.success('Horário seleccionado');
+    } catch (err) {
+      console.error(err);
+      return message.error('Isto foi embaraçoso... Por favor, volte a tentar.');
+    }
   };
 
   return (

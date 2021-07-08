@@ -15,8 +15,6 @@ interface SellerScheduleDaysProps {
 
 export const SellerScheduleDays: React.FC<SellerScheduleDaysProps> = ({ dates, sellerSlots }: SellerScheduleDaysProps) => {
   const DateUtil = DateUtils.getInstance();
-  // const url = `${process.env?.NEXT_PUBLIC_SERVER_API_BASE_URL as string}/slots/${state.sellerCode}`;
-
   const SlotsList: React.FC<{ slots: Slot[] }> = ({ slots }: { slots: Slot[] }) => {
     slots.sort((a,b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
 

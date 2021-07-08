@@ -1,7 +1,7 @@
 import axios from 'axios';
 import DateUtils from '../../../shared/utils/date-utils';
 import styles from '../../../styles/pages/schedule.module.scss';
-import { CheckoutScheduleStepPanel } from '../../../components/CheckoutScheduleStepPanel';
+// import { CheckoutScheduleStepPanel } from '../../../components/CheckoutScheduleStepPanel';
 import { CheckoutStepBar } from '../../../components/CheckoutStepBar';
 import { GetServerSideProps } from 'next';
 import { Layout } from 'antd';
@@ -15,15 +15,16 @@ export interface SchedulesProps {
   dates: string[],
 }
 
-const FallbackMessage: React.FC = () => (
-  <p>Oops! O carrinho de compras encontra-se vazio...</p>
-);
-
 const CheckoutSchedule: React.FC<SchedulesProps> = ({ schedules, dates }: SchedulesProps) => (
   <div className='page-container schedule-page'>
     <Content className={styles.scheduleContent} style={{ width: '100%' }}>
-      <CheckoutStepBar current={schedules?.length ? 2 : 0} />
-      {schedules?.length ? <CheckoutScheduleStepPanel schedules={schedules} dates={dates} /> : <FallbackMessage />}
+      <CheckoutStepBar
+        currentStep={schedules?.length ? 2 : 0}
+        {...{
+          schedules,
+          dates}
+        }
+      />
     </Content>
   </div>
 );
