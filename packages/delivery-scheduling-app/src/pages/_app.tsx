@@ -7,7 +7,7 @@ import { Layout } from 'antd';
 
 const DeliverySchedulingWebApp: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
   return (
-    <Layout className="layout-app">
+    <Layout className='layout-app'>
       <Component {...pageProps} />
     </Layout>
 

@@ -29,7 +29,7 @@ const CheckoutSchedule: React.FC<SchedulesProps> = ({ schedules, dates }: Schedu
 );
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const api = process.env?.PUBLIC_SERVER_API_BASE_URL;
+  const api = process.env?.SERVER_API_BASE_URL;
 
   if (!api) {
     throw new Error('API not found');

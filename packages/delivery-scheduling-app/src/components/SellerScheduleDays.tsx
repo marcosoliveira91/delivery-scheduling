@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import DateUtils from '../shared/utils/date-utils';
 import styles from '../styles/components/SellerScheduleDays.module.scss';
 import { Tabs, Radio } from 'antd';
@@ -13,29 +14,16 @@ interface SellerScheduleDaysProps {
 }
 
 export const SellerScheduleDays: React.FC<SellerScheduleDaysProps> = ({ dates, sellerSlots }: SellerScheduleDaysProps) => {
-  // let readyResult: { sellerCode: string, slotCode: string };
-  // const [ready, setReady] = useState(readyResult);
-  // const url = `${process.env?.NEXT_PUBLIC_SERVER_API_BASE_URL as string}/slots/${ready.sellerCode}`;
-
-  // useEffect(() => {
-  //   async function fetchAPI() {
-  //     if(ready) {
-  //       const { data } = await axios.put<{ customerCode: string, sellerCode: string }>(url);
-
-  //       // eslint-disable-next-line no-console
-  //       console.log(data);
-  //     }
-  //   }
-
-  //   void fetchAPI();
-  // });
+  const DateUtil = DateUtils.getInstance();
+  // const url = `${process.env?.NEXT_PUBLIC_SERVER_API_BASE_URL as string}/slots/${state.sellerCode}`;
 
   const SlotsList: React.FC<{ slots: Slot[] }> = ({ slots }: { slots: Slot[] }) => {
-    const DateUtil = DateUtils.getInstance();
+    slots.sort((a,b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
 
     return (
       <div className={styles.slotsList}>
         <Radio.Group
+          name={`radiogroup-${slots[0].sellerCode}`}
           key={slots[0].sellerCode}
           buttonStyle='solid'
           optionType='button'
@@ -46,7 +34,7 @@ export const SellerScheduleDays: React.FC<SellerScheduleDaysProps> = ({ dates, s
               const [from, to]: string[] = DateUtil.toTimeSlotFormat(slot.startDate, slot.endDate);
 
               return (
-                <Radio.Button key={slot.code} value={slot.code} disabled={!slot.isAvailable}>
+                <Radio.Button key={slot.code} value={slot.code} disabled={!slot.isAvailable} defaultChecked={false}>
                   {from} - {to}
                 </Radio.Button>
               );
@@ -58,9 +46,9 @@ export const SellerScheduleDays: React.FC<SellerScheduleDaysProps> = ({ dates, s
   };
 
   return (
-    <Tabs className={styles.datesTabs} defaultActiveKey="0" tabPosition={'top'} centered type='card'>
-      {dates.map(day => {
-        const DateUtil = DateUtils.getInstance();
+    <Tabs className={styles.datesTabs} defaultActiveKey='0' tabPosition={'top'} centered type='card'>
+      {dates.sort().map(day => {
+        // const DateUtil = DateUtils.getInstance();
         const threeLetterDay: string = DateUtil.format(day, { weekday: 'short' }).slice(0, 3);
         const dayDigit: string = DateUtil.format(day, { day: 'numeric' });
         const formattedDay = DateUtil.format(day, {
@@ -74,7 +62,8 @@ export const SellerScheduleDays: React.FC<SellerScheduleDaysProps> = ({ dates, s
             <div>{threeLetterDay}</div>
           </span>
         );
-        const slotsFilterdByDay = sellerSlots.filter(slot => (slot.startDate as string).split('T')[0] === day);
+        const slotsFilterdByDay = sellerSlots
+          .filter(slot => (slot.startDate as string).split('T')[0] === day);
 
         return (
           <TabPane className={styles.datesTabPane} tab={tabItem} key={day}>
