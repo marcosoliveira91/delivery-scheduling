@@ -1,5 +1,4 @@
-import { CreateSlotMapper, BookSlotMapper } from './mappers';
-import { CreateSlotQueryDto } from './dtos/queries/create-slot-query.dto';
+import { BookSlotMapper } from './mappers';
 import { FindAllSlotsQuery } from './entities/query/find-all-slots-query.entity';
 import { GetSlotsDto } from './dtos/results/get-slots.dto';
 import { GetSlotsMapper } from './mappers/get-slots.mapper';
@@ -12,7 +11,6 @@ import { BookSlot } from './dtos/queries/book-slot-query.dto';
 
 export interface ISlotService {
   getSlots(queryDto: GetSlotsQueryDto): Promise<GetSlotsDto>;
-  createSlot(query: CreateSlotQueryDto): Promise<SlotDto>;
   bookSlot(code: string, query: BookSlot): Promise<SlotDto | void>;
 }
 
@@ -28,18 +26,11 @@ class SlotService implements ISlotService {
     return GetSlotsMapper.toDTO(slots);
   }
 
-  async createSlot(queryDto: CreateSlotQueryDto): Promise<SlotDto> {
-    const queryEntity: Slot = CreateSlotMapper.toDomain(queryDto);
-    const slot: Slot = await this.slotRepository.create(queryEntity);
-
-    return CreateSlotMapper.toDTO(slot);
-  }
-
   async bookSlot(code: string, queryDto: BookSlot): Promise<SlotDto | void> {
     const queryEntity: BookSlotQuery = BookSlotMapper.toDomain(code, queryDto);
     const result = await this.slotRepository.upsert(queryEntity);
 
-    return result ? CreateSlotMapper.toDTO(result) : undefined;
+    return result ? void BookSlotMapper.toDTO(result) : undefined;
   }
 }
 

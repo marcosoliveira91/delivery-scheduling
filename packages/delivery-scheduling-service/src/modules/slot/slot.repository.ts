@@ -1,14 +1,14 @@
+import * as utils from '../../shared/utils';
 import config from '../../config';
 import ILogger from '../../shared/logger/logger.interface';
 import { BookSlotQuery } from './entities/query/book-slot-query.entity';
 import { FindAllSlotsQuery } from './entities/query/find-all-slots-query.entity';
 import { RRule, RRuleSet } from 'rrule';
 import { SellerDAO, SlotDAO } from '../../shared/database/mongoose/models';
+import { SellerNotFoundException, SlotUnavailableException } from '../../shared/exceptions';
 import { Slot } from './entities/slot.entity';
-import * as utils from '../../shared/utils';
 
 export interface ISlotRepository {
-  create(query: Slot): Promise<Slot>;
   findAllUpcoming(query: FindAllSlotsQuery): Promise<Slot[]>;
   upsert(query: BookSlotQuery): Promise<Slot | void>;
 }
@@ -18,29 +18,6 @@ class SlotRepository implements ISlotRepository {
   constructor(
     private readonly logger: ILogger,
   ) { }
-
-  async create(query: Slot): Promise<Slot> {
-    try {
-      const found = await SlotDAO.findOne({ code: query.code }).lean();
-
-      if (found) {
-        throw new Error('Slot resource already exists');
-      }
-
-      const newSlot = new SlotDAO(query);
-      const created = await newSlot.save();
-
-      return created ?? {};
-    } catch (error) {
-      this.logger.error({
-        message: 'Error in SlotRepository.create',
-        data: { query },
-        error: error as Error,
-      });
-
-      throw error;
-    }
-  }
 
   async findAllUpcoming(query: FindAllSlotsQuery): Promise<Slot[]> {
     try {
@@ -90,7 +67,6 @@ class SlotRepository implements ISlotRepository {
     }
   }
 
-
   async upsert(query: BookSlotQuery): Promise<Slot | void> {
     try {
       const { code, sellerCode } = query;
@@ -109,7 +85,7 @@ class SlotRepository implements ISlotRepository {
       }
 
       if(!foundSlot.isAvailable) {
-        throw new Error(`Slot code ${code} is not available`);
+        throw new SlotUnavailableException(code);
       }
 
       const updatedCurrentCapacity = foundSlot.capacity.current - 1;
@@ -157,6 +133,7 @@ class SlotRepository implements ISlotRepository {
     return newBookedSlot.save();
   }
 
+  // to be extracted into a domain service
   private async computeUpcomingSlots(
     { fromDate, untilDate, sellerCode }: Pick<FindAllSlotsQuery, 'untilDate' | 'fromDate' | 'sellerCode'>,
     exclusionDates: Date[]
@@ -164,7 +141,7 @@ class SlotRepository implements ISlotRepository {
     const seller = await SellerDAO.findOne({ code: sellerCode }).lean();
 
     if(!seller) {
-      throw new Error('Seller not found');
+      throw new SellerNotFoundException(sellerCode);
     }
 
     const rruleSet: RRuleSet = new RRuleSet();

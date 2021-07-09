@@ -1,4 +1,3 @@
-import { CreateSlotQueryDto } from './dtos/queries/create-slot-query.dto';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { GetSlotsDto } from './dtos/results/get-slots.dto';
 import { GetSlotsQueryDto } from './dtos/queries/get-slots-query.dto';
@@ -15,12 +14,6 @@ class SlotController {
     const query = request.query as GetSlotsQueryDto;
 
     return this.slotService.getSlots(query);
-  }
-
-  createSlot = (request: FastifyRequest): Promise<SlotDto> => {
-    const body = request.body as CreateSlotQueryDto;
-
-    return this.slotService.createSlot(body);
   }
 
   bookSlot = async (request: FastifyRequest, reply: FastifyReply<any>): Promise<SlotDto | void> => {

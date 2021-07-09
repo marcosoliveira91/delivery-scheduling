@@ -2,6 +2,7 @@ import ILogger from '../../shared/logger/logger.interface';
 import { PartialUpdateSellerQuery as PartialUpdateSellerQueryEntity } from './entities/queries/partial-update-seller-query.entity';
 import { Seller } from './entities/seller.entity';
 import { SellerDAO } from '../../shared/database/mongoose/models/seller.dao';
+import { SellerAlreadyCreatedException, SellerNotFoundException } from '../../shared/exceptions';
 
 export interface ISellerRepository {
   create(query: Seller): Promise<Seller>;
@@ -20,7 +21,7 @@ class SellerRepository implements ISellerRepository {
       const found = await SellerDAO.findOne({ code: query.code }).lean();
 
       if (found) {
-        throw new Error('Seller resource already exists');
+        throw new SellerAlreadyCreatedException(query.code);
       }
 
       const newSeller = new SellerDAO(query);
@@ -66,7 +67,7 @@ class SellerRepository implements ISellerRepository {
       const updated = await SellerDAO.findOneAndUpdate(filters, toUpdate, withOptions).lean();
 
       if(!updated) {
-        throw new Error(`Seller ${query.code} not found`);
+        throw new SellerNotFoundException(code);
       }
 
       return updated;
