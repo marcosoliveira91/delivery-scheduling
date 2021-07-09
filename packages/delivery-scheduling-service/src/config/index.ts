@@ -18,7 +18,7 @@ const config = convict<IConfig>({
   },
   cors: {
     originRegex: {
-      default: '(localhost:3001)$',
+      default: 'localhost',
       env: 'CORS_ORIGIN_REGEX',
     },
     credentials: {
@@ -30,6 +30,10 @@ const config = convict<IConfig>({
       host: {
         default: 'timeslots.jnyag.mongodb.net',
         env: 'DB_HOST',
+      },
+      srvConnection: {
+        default: true,
+        env: 'DB_SRV_CONNECTION',
       },
       user: {
         default: 'root',

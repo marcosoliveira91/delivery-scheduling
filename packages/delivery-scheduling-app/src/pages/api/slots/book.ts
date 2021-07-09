@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { Slot } from '../../../interfaces/slot.interface';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Handler } from 'express';
 
 type BookSlotQuery = {
   code: string;
@@ -16,7 +15,7 @@ type ResponseError = {
 
 export const bookSlot = async ({ code, sellerCode, customerCode }: BookSlotQuery): Promise<Slot> => {
   try {
-    const api = process.env.apiBaseUrl as string;
+    const api: string = process.env.apiBaseUrl;
     const url = `${api}/slots/${code}/book`;
 
     type Payload = Pick<BookSlotQuery, 'sellerCode' | 'customerCode'>;

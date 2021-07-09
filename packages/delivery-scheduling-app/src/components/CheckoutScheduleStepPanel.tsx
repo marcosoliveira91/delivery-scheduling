@@ -6,6 +6,7 @@ import { Schedule } from '../interfaces/schedule.interface';
 import { SchedulesProps } from '../pages/checkout/schedule/index';
 import { SellerScheduleDays } from './SellerScheduleDays';
 import { useEffect, useState } from 'react';
+import { NextRouter, useRouter } from 'next/router';
 
 interface CheckoutScheduleStepPanelProps {
   schedules: Schedule[],
@@ -17,13 +18,13 @@ export const CheckoutScheduleStepPanel: React.FC<SchedulesProps> = ({ schedules,
     role: '',
     uuid: '',
   });
+  const router: NextRouter = useRouter();
 
   useEffect(() => {
     updateLoggedUser({...mockGetUserSession()});
   },[]);
 
-  const onFinish = async (values: Record<string, string>) => {
-
+  const onFinish = async (values: Record<string, string>): Promise<void> => {
     const promises = Object.keys(values).map(sellerCode => {
       return bookSlot({
         code: values[sellerCode],
@@ -34,7 +35,17 @@ export const CheckoutScheduleStepPanel: React.FC<SchedulesProps> = ({ schedules,
 
     try {
       await Promise.all(promises);
-      return message.success('Horário seleccionado');
+      await message.success(
+        'Horário seleccionado',
+        2,
+      );
+
+      void router.push(
+        { pathname: '/' },
+        undefined,
+        { shallow: false }
+      );
+
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);

@@ -7,9 +7,8 @@ const dbConnection = async (dbOptions: IDBConnectionOptions): Promise<void> => {
   const logger: ILogger = Logger.getInstance();
 
   try {
-    // const uri = 'mongodb+srv://root:test@timeslots.jnyag.mongodb.net/timeslots?retryWrites=true&w=majority'; //server
-    // const uri = 'mongodb://root:root@0.0.0.0:27017?retryWrites=true&w=majority'; // local
-    const uri = `mongodb+srv://root:${dbOptions.password}@${dbOptions.host}/${dbOptions.database}?retryWrites=true&w=majority`;
+    const path = dbOptions.srvConnection ? 'mongodb+srv' : 'mongodb';
+    const uri = `${path}://${dbOptions.user}:${dbOptions.password}@${dbOptions.host}/${dbOptions.database}?retryWrites=true&w=majority`;
 
     await mongoose.connect(uri,{
       useNewUrlParser: true,

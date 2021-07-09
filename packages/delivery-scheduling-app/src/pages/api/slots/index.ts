@@ -14,7 +14,7 @@ type ResponseError = {
 
 export const getSlots = async ({ sellerCode, untilDate }: SlotQuery): Promise<{ slots: Slot[] }> => {
   try {
-    const api = process.env.apiBaseUrl as string;
+    const api: string = process.env.apiBaseUrl;
     const url = `${api}/slots?sellerCode=${sellerCode}&untilDate=${untilDate}`;
     const { data } = await axios.get<{ slots: Slot[] }>(url);
 

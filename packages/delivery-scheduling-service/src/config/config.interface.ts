@@ -9,6 +9,7 @@ export interface IConfig {
     connection: {
       host: string;
       user: string;
+      srvConnection: boolean;
       password: string;
       database: string;
     }

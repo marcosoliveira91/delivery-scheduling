@@ -7,8 +7,6 @@ import { SellerDAO, SlotDAO } from '../../shared/database/mongoose/models';
 import { Slot } from './entities/slot.entity';
 import * as utils from '../../shared/utils';
 
-/* eslint-disable no-console */
-
 export interface ISlotRepository {
   create(query: Slot): Promise<Slot>;
   findAllUpcoming(query: FindAllSlotsQuery): Promise<Slot[]>;

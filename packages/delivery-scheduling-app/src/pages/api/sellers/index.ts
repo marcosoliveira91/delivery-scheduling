@@ -9,7 +9,7 @@ type ResponseError = {
 
 export const getSellers = async (): Promise<{ sellers: Seller[] }> => {
   try {
-    const api = process.env.apiBaseUrl as string;
+    const api: string = process.env.apiBaseUrl;
     const url = `${api}/sellers`;
     const { data } = await axios.get<{ sellers: Seller[] }>(url);
 
