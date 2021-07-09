@@ -1,9 +1,0 @@
-NODE_ENV=development
-
-SERVER_PORT=3001
-CORS_ORIGIN_REGEX=localhost
-
-DB_HOST=timeslots.jnyag.mongodb.net
-DB_USER=root
-DB_PASSWORD=test
-DB_NAME=timeslots
