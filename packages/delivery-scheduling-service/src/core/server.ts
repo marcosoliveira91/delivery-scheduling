@@ -1,3 +1,4 @@
+import Logger from '../shared/logger/logger';
 import fastify, {
   FastifyInstance,
   FastifyRequest,
@@ -30,21 +31,23 @@ export class Server {
     void this.instance.listen(port, '::')
       .then((address: string) => this.instance.log.info(`Server listening on ${address}`))
       .catch((error: Error) => {
-        this.instance.log.error({
+        Logger.getInstance().error({
           message: 'Error in Server.init',
+          data: {},
           error,
         });
+
         process.exit(1);
       });
   }
 
-  setRoute(verb: Verb, route: string, handler: RouteHandler, opts?: RouteShorthandOptions): void {
+  setRoute<T>(verb: Verb, route: string, handler: RouteHandler<T>, opts?: RouteShorthandOptions): void {
     if (!opts) {
-      this.instance[verb](route, handler);
+      this.instance[verb]<T>(route, handler);
       return;
     }
 
-    this.instance[verb](route, opts, handler);
+    this.instance[verb]<T>(route, opts, handler);
   }
 
   use(plugin: FastifyPluginCallback, opts?: FastifyRegisterOptions<FastifyPluginOptions>): void {

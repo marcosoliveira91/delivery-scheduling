@@ -4,6 +4,7 @@
     "baseUrl": "./packages",
     "paths": {
       "delivery-scheduling-service": ["delivery-scheduling-service/src"],
+      "delivery-scheduling-app": ["delivery-scheduling-app/src"],
     }
   }
 }

@@ -3,6 +3,7 @@ import ILogger from '../../shared/logger/logger.interface';
 import Logger from '../../shared/logger/logger';
 import { BaseException } from '../../shared/exceptions/base-exception';
 import { FastifyError, FastifyReply, FastifyRequest } from 'fastify';
+import { SellerAlreadyCreatedException, SellerNotFoundException, SlotNotFoundException, SlotUnavailableException } from '../../shared/exceptions';
 import { Server } from '../server';
 
 type ReplyErrorPayload<T extends FastifyError | BaseException> = Pick<T, 'code' | 'message'>;
@@ -80,10 +81,23 @@ export class Hooks {
     });
   };
 
-  private static handleBaseExceptionReply(error: BaseException, _reply: FastifyReply<any>): ReplyErrorPayload<BaseException> {
+  private static handleBaseExceptionReply(error: BaseException, reply: FastifyReply<any>): ReplyErrorPayload<BaseException> {
+    /** domain/app exceptions that require status code updates goes here */
     switch (error.constructor) {
-    // TODO: add exception cases that require updating reply status code
+    case SellerNotFoundException:
+    case SlotNotFoundException:
+    case SlotUnavailableException:
+      void reply.status(404);
+      break;
+    case SellerAlreadyCreatedException:
+      void reply.status(422);
+      break;
     default:
+      void reply.send({
+        code: 'INTERNAL_ERROR',
+        message: 'Internal Server Error',
+        stack: config.get().env !== 'production' && error.stack,
+      });
       break;
     }
 
@@ -94,11 +108,9 @@ export class Hooks {
   }
 
   private static handleSchemaValidationException(error: FastifyError): ReplyErrorPayload<FastifyError> {
-    const validationError = error?.validation?.[0];
-
     return {
       code: 'BAD_REQUEST',
-      message: validationError ? `${validationError.dataPath} ${validationError.message}` : 'invalid request',
+      message: error.message,
     };
   }
 }

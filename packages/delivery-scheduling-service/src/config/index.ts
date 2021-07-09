@@ -13,16 +13,50 @@ const config = convict<IConfig>({
     arg: 'port',
     default: 3001,
     doc: 'Port to bind',
-    env: 'PORT',
+    env: 'SERVER_PORT',
     format: 'port',
   },
   cors: {
     originRegex: {
-      default: '(localhost:3001)$',
+      default: 'localhost',
       env: 'CORS_ORIGIN_REGEX',
     },
     credentials: {
       default: true,
+    },
+  },
+  db: {
+    connection: {
+      host: {
+        default: 'timeslots.jnyag.mongodb.net',
+        env: 'DB_HOST',
+      },
+      srvConnection: {
+        default: true,
+        env: 'DB_SRV_CONNECTION',
+      },
+      user: {
+        default: 'root',
+        env: 'DB_USER',
+      },
+      password: {
+        default: 'test',
+        env: 'DB_PASSWORD',
+      },
+      database: {
+        default: 'timeslots',
+        env: 'DB_NAME',
+      },
+    },
+  },
+  businessRules: {
+    teamCapacity: {
+      default: 2,
+      env: 'BUSINESS_DEFAULT_TEAM_CAPACITY',
+    },
+    slotDurationInMin: {
+      default: 30,
+      env: 'BUSINESS_DEFAULT_SLOT_DURATION_MINUTES',
     },
   },
 });

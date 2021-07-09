@@ -8,12 +8,11 @@ export class CorsPlugin {
 
     server.use(fastifyCorsPlugin, {
       origin: (origin: string, callback: (err: Error | null, allow?: boolean) => void) => {
-        if (new RegExp(cors.originRegex, 'i').test(origin) || !origin) {
 
+        if (new RegExp(cors.originRegex, 'i').test(origin) || !origin) {
           callback(null, true);
           return;
         }
-
         callback(new Error('Cross-Origin Request Blocked'));
       },
       credentials: cors.credentials,

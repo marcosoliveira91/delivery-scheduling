@@ -1,5 +1,5 @@
 {
-  "name": "delivery-scheduling-service",
+  "name": "delivery-scheduling",
   "private": true,
   "version": "1.0.0",
   "author": "Marcos Oliveira",
@@ -11,11 +11,12 @@
     "clean": "lerna run clean",
     "build": "lerna run build",
     "lint": "eslint --ext .js,.ts packages/*/src",
-    "start": "lerna exec --scope=delivery-scheduling-service -- npm start",
-    "start:dev": "env-cmd -f deployments/local/environment lerna exec --scope=delivery-scheduling-service -- npm run start:dev",
+    "start:webapp": "env-cmd -f deployments/local/environment lerna exec --scope=delivery-scheduling-app -- npm start",
+    "start:server": "env-cmd -f deployments/local/environment lerna exec --scope=delivery-scheduling-service -- npm start",
+    "start:webapp:dev": "env-cmd -f deployments/local/environment lerna exec --scope=delivery-scheduling-app -- npm run dev",
+    "start:server:dev": "env-cmd -f deployments/local/environment lerna exec --scope=delivery-scheduling-service -- npm run start:dev",
     "test": "lerna run test",
     "test:cov": "lerna run --stream test:cov",
-    
     "test:server": "lerna exec --scope=delivery-scheduling-service -- npm run test",
     "test:server:cov": "lerna exec --scope=delivery-scheduling-service -- npm run test:cov"
   },
@@ -26,7 +27,7 @@
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",
-    "@types/node": "^15.12.5",
+    "@types/node": "^15.6.2",
     "@typescript-eslint/eslint-plugin": "^4.28.1",
     "@typescript-eslint/parser": "^4.28.1",
     "env-cmd": "^10.1.0",
@@ -36,6 +37,7 @@
     "jest": "^27.0.6",
     "jest-ts-auto-mock": "^2.0.0",
     "lerna": "^4.0.0",
+    "rrule": "^2.6.8",
     "ts-auto-mock": "^3.3.0",
     "ts-jest": "^27.0.3",
     "ts-node": "^10.0.0",
