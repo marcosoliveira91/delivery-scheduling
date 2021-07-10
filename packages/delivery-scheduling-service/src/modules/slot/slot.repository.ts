@@ -25,10 +25,10 @@ class SlotRepository implements ISlotRepository {
       // query db for every saved slot between the two dates
       const savedSlots = await SlotDAO.find({
         sellerCode: query.sellerCode,
-        startDate: { '$gte': new Date(query.fromDate) },
-        endDate: { '$lte': new Date(query.untilDate) },
+        startDate: { '$gte': query.fromDate },
+        endDate: { '$lte': query.untilDate },
       }).lean();
-      const savedSlotDates: Date[] = savedSlots.map(slot => slot.startDate);
+      const savedSlotDates: string[] = savedSlots.map(slot => slot.startDate);
 
       // computes every possible datetime objects between two dates, with recurrence rules
       const computedDates: Date[] = await this.computeUpcomingSlots(query, savedSlotDates);
@@ -36,12 +36,13 @@ class SlotRepository implements ISlotRepository {
 
       const computedSlots: Slot[] = computedDates.map(date => {
         const encoder: number = date.getTime();
+        const utcStr = date.toISOString();
 
         return new SlotDAO({
           code: utils.generateReadableCode(query.sellerCode, encoder),
           sellerCode: query.sellerCode,
-          startDate: date,
-          endDate: utils.addMinutes(date, slotDurationInMin),
+          startDate: utcStr,
+          endDate: utils.addMinutes(date, slotDurationInMin).toISOString(),
           status: 'AVAILABLE',
           isAvailable: true,
           duration: slotDurationInMin,
@@ -118,8 +119,8 @@ class SlotRepository implements ISlotRepository {
     const newBookedSlot = new SlotDAO({
       code,
       sellerCode,
-      startDate,
-      endDate: utils.addMinutes(startDate, slotDurationInMin),
+      startDate: startDate.toISOString(),
+      endDate: utils.addMinutes(startDate, slotDurationInMin).toISOString(),
       status: currentCapacity ? 'AVAILABLE' : 'UNAVAILABLE',
       isAvailable: currentCapacity > 0,
       duration: slotDurationInMin,
@@ -136,7 +137,7 @@ class SlotRepository implements ISlotRepository {
   // to be extracted into a domain service
   private async computeUpcomingSlots(
     { fromDate, untilDate, sellerCode }: Pick<FindAllSlotsQuery, 'untilDate' | 'fromDate' | 'sellerCode'>,
-    exclusionDates: Date[]
+    exclusionDates: string[]
   ): Promise<Date[]> {
     const seller = await SellerDAO.findOne({ code: sellerCode }).lean();
 
@@ -161,7 +162,7 @@ class SlotRepository implements ISlotRepository {
       }));
     });
 
-    exclusionDates.map(date => rruleSet.exdate(date));
+    exclusionDates.map(date => rruleSet.exdate(new Date(utils.utc(new Date(date)))));
 
     const computedDates: Date[] = rruleSet.all();
 

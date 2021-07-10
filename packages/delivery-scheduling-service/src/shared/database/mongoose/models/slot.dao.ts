@@ -3,8 +3,8 @@ import { Schema, model } from 'mongoose';
 export interface Slot {
   code: string;
   sellerCode: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   status: string,
   isAvailable: boolean,
   duration: {
@@ -33,11 +33,11 @@ const schema = new Schema<Slot>({
   },
   isAvailable: { type: Boolean },
   startDate: {
-    type: Date,
+    type: String,
     required: true,
   },
   endDate: {
-    type: Date,
+    type: String,
     required: true,
   },
   duration: {
