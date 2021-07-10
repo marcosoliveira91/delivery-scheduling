@@ -11,7 +11,7 @@ const getWeekDayNum = (dayStr: string | WeekDays): number => {
 const getHoursSequence = (startTime: string, endTime: string): number[] => {
   const lowerBound = Number(startTime.split(':')[0]);
   const upperBound = Number(endTime.split(':')[0]);
-  const size: number = upperBound - lowerBound + 1;
+  const size: number = upperBound - lowerBound;
 
   return Array(size).fill(0).map((_, i) => i + lowerBound);
 };
